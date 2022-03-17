@@ -9,3 +9,16 @@ RUN apk update
 
 # Install OpenJDK 8
 RUN apk add openjdk8
+
+# Setup data directory
+RUN mkdir /mcsrv
+
+# Get and install the Forge Server Software
+RUN cd / && wget https://maven.minecraftforge.net/net/minecraftforge/forge/1.16.5-36.2.20/forge-1.16.5-36.2.20-installer.jar
+RUN cd / && java -jar forge-1.16.5-36.2.20-installer.jar --installServer
+
+# Agree to the Minecraft EULA
+RUN cd / && touch eula.txt
+RUN cd / && echo 'eula=true' > eula.txt
+
+ENTRYPOINT cp -r /mcsrv . && java -jar forge-1.16.5-36.2.20.jar nogui
